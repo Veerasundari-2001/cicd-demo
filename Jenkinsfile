@@ -13,7 +13,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh 'pytest test_app.py -v'
+                sh '/var/lib/jenkins/.local/bin/pytest test_app.py -v'
             }
         }
         stage('Docker Build and Push') {
