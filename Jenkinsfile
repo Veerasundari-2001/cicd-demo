@@ -26,7 +26,15 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                sh 'ssh -o StrictHostKeyChecking=no ubuntu@3.1.100.20 "docker pull 521223133955.dkr.ecr.ap-southeast-1.amazonaws.com/cicd-demo:latest && docker stop cicd-demo || true && docker rm cicd-demo || true && docker run -d --name cicd-demo -p 5000:5000 521223133955.dkr.ecr.ap-southeast-1.amazonaws.com/cicd-demo:latest"'
+                sh ''' ssh -o StrictHostKeyChecking=no ubuntu@3.1.100.20 "
+                aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 521223133955.dkr.ecr.ap-southeast-1.amazonaws.com &&
+                docker pull 521223133955.dkr.ecr.ap-southeast-1.amazonaws.com/cicd-demo:latest &&
+                docker stop cicd-demo || true &&
+                docker rm cicd-demo || true &&
+                docker run -d --name cicd-demo -p 5000:5000 521223133955.dkr.ecr.ap-southeast-1.amazonaws.com/cicd-demo:latest
+            "
+        '''
+
             }
         }
     }
